@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firmware Downloads</title>
+</head>
+<body>
+  <h1>Available Firmware</h1>
+  <ul id="file-list"></ul>
+
+  <script>
+    // Ganti sesuai user & repo kamu
+    const user = "yossysinko";
+    const repo = "firmware-gateway";
+    const branch = "main";  // atau "gh-pages" kalau kamu pakai branch khusus
+    const path = "docs";    // folder tempat firmware.bin kamu simpan
+
+    const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/${path}?ref=${branch}`;
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(files => {
+        const ul = document.getElementById("file-list");
+        files.forEach(file => {
+          if (file.type === "file") {
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.href = file.name;
+            a.textContent = file.name;
+            li.appendChild(a);
+            ul.appendChild(li);
+          }
+        });
+      })
+      .catch(err => console.error("Error fetching file list:", err));
+  </script>
+</body>
+</html>
